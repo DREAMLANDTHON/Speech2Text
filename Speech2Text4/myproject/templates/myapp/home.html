@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Speech-to-Text</title>
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+</head>
+<body>
+  <h1>Real-time Speech-to-Text</h1>
+  <p id="output-text">음성을 입력하세요...</p>
+  <button id="get-result-btn">시작</button>
+  <button id="stop-btn">정지</button>
+
+  <div class="container">
+  <div class="left-div">
+        
+    <div id="cum"><h2>Talk</h2></div>
+    <div id="cum-result-container"></div>
+
+  </div>
+  <div class="vertical-line"></div>
+  
+  <div class="right-div">
+
+  </div>
+  </div>
+
+  <script>
+    var recognition; // SpeechRecognition 객체를 저장할 변수
+    var mytext = "";
+    var pre_text = "";
+    $(document).ready(function() {
+        $("#get-result-btn").click(function() {
+            recognition = new webkitSpeechRecognition(); // 음성 인식 객체 생성
+            recognition.continuous = true; // 연속적인 음성 인식을 활성화
+            recognition.interimResults = true; // 중간 결과를 반환하도록 설정
+
+            recognition.onresult = function(event) {
+                var result = event.results[event.results.length - 1][0].transcript;
+                $("#result-container").text(result);
+                  
+                if(result.length < pre_text.length)
+                {
+                  mytext += pre_text;
+                  $("#cum-result-container").text(mytext);
+                }
+                pre_text = result             
+            };
+
+            recognition.onend = function() {
+                // 음성 인식이 끝날 때의 처리
+                console.log("음성 인식 종료");
+                recognition.stop();
+                $("#get-result-btn").prop("disabled", false); // 시작 버튼 활성화
+            };
+
+            recognition.start(); // 음성 인식 시작
+            $("#get-result-btn").prop("disabled", true); // 시작 버튼 비활성화
+        });
+
+        $("#stop-btn").click(function() {
+            recognition.stop(); // 음성 인식 중지
+        });
+    });
+  </script>
+
+</body>
+</html>
