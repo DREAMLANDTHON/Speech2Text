@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import HttpResponse
 
 import openai
-from .models import Saved  # YourModel은 저장하고자 하는 모델명으로 대체해야 합니다.
+from .models import Saved,Saved2,Saved3,Saved4,Saved5  # YourModel은 저장하고자 하는 모델명으로 대체해야 합니다.
 
 
 def is_ajax(request):
@@ -67,18 +67,18 @@ def save_result_to_db(request):
         result = request.POST.get("result")  # 클라이언트에서 전송한 결과값을 가져옴
 
         # DB에 결과값 저장
-        Saved.objects.create(result=result)
+        Saved2.objects.create(result=result)
         return JsonResponse({"message": "Result saved successfully."})
 
 def show_saved_results(request):
-    saved_results = Saved.objects.all()
+    saved_results = Saved2.objects.all()
     return render(request, "myapp/saved_results.html", {"saved_results": saved_results})
 
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
 def process_text_function(text):
     print("!!:" + text)
-    openai.api_key = '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'
+    openai.api_key = 'Put your API KEy HERE'
 
     completion = openai.ChatCompletion.create(
     model = 'gpt-3.5-turbo',
