@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+{% csrf_token %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700&display=swap"
+    />
+  </head>
+
+  <body>
+    <div class="desktop-26">
+        <div class="div">
+           
+            {% for result in saved_results %}
+            <li>{{ result.result }}</li>
+            {% endfor %}
+
+        </div>
+        <div class="div10">
+            <div class="div11"></div>
+            <div class="child3"></div>
+            <img class="icon5" alt="" src="{% static 'public/2.svg' %}" />
+
+            <div class="frame-parent">
+                <div class="frame-group">
+                    <div class="container">
+                        <div class="div12">
+                            <div class="group-div">
+                                <div class="group-child"></div>
+                            </div>
+                            <b class="b4">가</b>
+                            <img class="icon6" alt="" src="{% static 'public/5.svg' %}" />
+                        </div>
+                        <div class="div13">글자 크기</div>
+                    </div>
+                    <div class="pt">10 pt</div>
+                </div>
+                <div class="group-wrapper">
+                    <div class="parent1">
+                        <div class="div14">설정</div>
+                        <img class="icon7" alt="" src="{% static 'public/4.svg' %}" />
+                    </div>
+                </div>
+                <div class="group-item"></div>
+                <div class="div15">
+                    <img class="frame-icon" alt="" src="{% static 'public/frame-15.svg' %}" />
+
+                    <div class="div16">김한나</div>
+                </div>
+                <div class="frame-container">
+                    <div class="container">
+                        <div class="div12">
+                            <div class="child4"></div>
+                            <div class="ellipse-div"></div>
+                            <div class="subtract-parent">
+                                <img class="subtract-icon" alt="" src="{% static 'public/subtract.svg' %}" />
+
+                                <b class="b5">ㄱ</b>
+                                <b class="g">G</b>
+                            </div>
+                        </div>
+                        <div class="div18">언어 선택</div>
+                    </div>
+                    <div class="div19">한국어</div>
+                </div>
+            </div>
+            <div class="group-parent">
+                <div class="frame-parent1">
+                    <div class="parent2">
+                        <img class="icon8" alt="" src="{% static 'public/7.svg' %}" />
+
+                        <div class="div20">경영학입문</div>
+                    </div>
+                    <img class="group-inner" alt="" src="{% static 'public/polygon-4.svg' %}" />
+                </div>
+                <div class="polygon-parent">
+                    <img class="polygon-icon" alt="" src="{% static 'public/polygon-2.svg' %}" />
+
+                    <div class="parent3">
+                        <img class="icon8" alt="" src="{% static 'public/-.svg' %}" />
+
+                        <div class="div20">한국사</div>
+                    </div>
+                </div>
+                <div class="group-container">
+                    <div class="parent4">
+                        <img class="icon10" alt="" src="{% static 'public/6.svg' %}" />
+
+                        <div class="div22">1주차 강의</div>
+                    </div>
+                </div>
+                <div class="div23">2주차 강의</div>
+                <div class="parent5">
+                    <div class="div24">새로 만들기</div>
+                    <img class="icon11" alt="" src="{% static 'public/9.svg' %}" />
+                </div>
+                <div class="parent6">
+                    <div class="div25">새로 만들기</div>
+                    <img class="group-icon" alt="" src="{% static 'public/group-61.svg' %}" />
+                </div>
+            </div>
+            <img class="child5" alt="" src="{% static 'public/group-65.svg' %}" />
+
+            <img class="mask-group-icon" alt="" src="{% static 'public/mask-group@2x.png' %}" />
+        </div>
+    </div>
+
+    <script>
+      var node1 = document.getElementById("node1");
+      if (node1) {
+        node1.addEventListener("click", function (e) {
+          // Please sync "Desktop - 9" to the project
+        });
+      }
+    </script>
+
+<script>
+  var recognition; // SpeechRecognition 객체를 저장할 변수
+  var mytext = "";
+  var pre_text = "";
+  $(document).ready(function() {
+      $("#get-result-btn").click(function() {
+          recognition = new webkitSpeechRecognition(); // 음성 인식 객체 생성
+          recognition.continuous = true; // 연속적인 음성 인식을 활성화
+          recognition.interimResults = true; // 중간 결과를 반환하도록 설정
+
+          recognition.onresult = function(event) {
+              var result = event.results[event.results.length - 1][0].transcript;
+              
+              console.log(result);
+              if(result.length < pre_text.length)
+              {
+                mytext += pre_text;
+                $("#sttout").text(mytext);
+              }
+              pre_text = result             
+            };
+
+          recognition.onend = function() {
+              // 음성 인식이 끝날 때의 처리
+              console.log("음성 인식 종료");
+              recognition.stop();
+              $("#get-result-btn").prop("disabled", false); // 시작 버튼 활성화
+          };
+
+          recognition.start(); // 음성 인식 시작
+          $("#get-result-btn").prop("disabled", true); // 시작 버튼 비활성화
+      });
+      
+      $("#stop-btn").click(function() {
+          recognition.stop(); // 음성 인식 중지
+      });
+
+      $("#save-btn").click(function() {
+        storeResult();
+      });
+
+      var answer = "";
+      $("#get-text-btn").click(function() {
+      
+      var textValue = $("#div2").text();
+      // Ajax 요청으로 텍스트 값을 Django 서버로 전송
+      $.ajax({
+          url: "/get_text/",
+          type: "POST",
+          data: {text_value: textValue},
+          success: function(response) {
+              answer = response.ans;
+              // 결과를 출력할 div에 결과 값을 설정
+              //console.log(answer);
+              $("#output").html(answer);
+          },
+          error: function(xhr) {
+              alert("Error occurred while sending the data.");
+          }
+         });
+        });
+    });
+        
+    function storeResult() {
+        var result = $("sttout").text();
+        $.ajax({
+        type: "POST",
+        url: "{% url 'save_result' %}",
+        data: {
+            result: result,
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function(response) {
+            console.log("저장 성공!");
+            // 성공적으로 저장했을 때 필요한 처리를 추가하면 됩니다.
+        },
+        error: function(error) {
+            console.log("저장 실패!");
+            // 저장 실패시 필요한 처리를 추가하면 됩니다.
+         },
+        });
+    }
+</script>
+
+</body>
+</html>
