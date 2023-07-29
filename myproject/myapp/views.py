@@ -78,7 +78,7 @@ def show_saved_results(request):
 
 def process_text_function(text):
     print("!!:" + text)
-    openai.api_key = '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'
+    openai.api_key = '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'
 
     completion = openai.ChatCompletion.create(
     model = 'gpt-3.5-turbo',

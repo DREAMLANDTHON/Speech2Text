@@ -200,7 +200,7 @@
               var result = event.results[event.results.length - 1][0].transcript;
               
               console.log(result);
-              if(result.length < pre_text.length)
+              if(compareFirstTwoCharacters(result, pre_text))
               {
                 mytext += pre_text;
                 $("#sttout").text(mytext);
@@ -299,6 +299,17 @@ function storeResult2() {
         // 저장 실패시 필요한 처리를 추가하면 됩니다.
     },
     });
+}
+function compareFirstTwoCharacters(str1, str2) {
+    // 첫 번째 문자열과 두 번째 문자열이 적어도 두 문자 이상인지 확인합니다.
+    if (str1.length >= 2 && str2.length >= 2) {
+      // 첫 번째 문자열의 앞 두 글자와 두 번째 문자열의 앞 두 글자를 비교합니다.
+      if (str1.substring(0, 2) === str2.substring(0, 2)) {
+        return false;
+      }
+    }
+  
+    return true;
 }
 </script>
 
